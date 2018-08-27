@@ -1,6 +1,10 @@
 require 'rake_docker'
 require 'rake_terraform'
 require 'yaml'
+require 'git'
+require 'semantic'
+
+require_relative 'lib/version'
 
 namespace :image do
   RakeDocker.define_image_tasks do |t|
@@ -17,6 +21,20 @@ namespace :image do
     t.credentials = YAML.load_file(
         "config/secrets/dockerhub/credentials.yaml")
 
-    t.tags = ['latest']
+    t.tags = [latest_tag.to_s, 'latest']
   end
+end
+
+namespace :version do
+  task :bump, [:type] do |_, args|
+    next_tag = latest_tag.send("#{args.type}!")
+    repo.add_tag(next_tag.to_s)
+    repo.push('origin', 'master', tags: true)
+  end
+end
+
+def latest_tag
+  Git.open('.').tags.map do |tag|
+    Semantic::Version.new(tag.name)
+  end.max
 end
