@@ -9,7 +9,6 @@ GIT_CRYPT_PACKAGE_URL="https://www.agwa.name/projects/git-crypt/downloads/git-cr
 GIT_CRYPT_SIGNATURE_URL="https://www.agwa.name/projects/git-crypt/downloads/git-crypt-${GIT_CRYPT_VERSION}.tar.gz.asc"
 
 apk --update add \
-    bash \
     curl \
     git \
     gpg \

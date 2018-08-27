@@ -6,6 +6,7 @@ jobs:
     - image: docker:18.06.1-ce-git
     steps:
     - checkout
+    - run: ./scripts/ci/common/install-bash.sh
     - run: ./scripts/ci/common/install-ruby.sh
     - run: ./scripts/ci/common/install-git-crypt.sh
     - run: ./scripts/ci/common/configure-git.sh
@@ -16,6 +17,7 @@ jobs:
     - image: docker:18.06.1-ce-git
     steps:
     - checkout
+    - run: ./scripts/ci/common/install-bash.sh
     - run: ./scripts/ci/common/install-ruby.sh
     - run: ./scripts/ci/common/install-git-crypt.sh
     - run: ./scripts/ci/common/configure-git.sh

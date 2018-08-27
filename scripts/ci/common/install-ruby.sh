@@ -5,7 +5,6 @@ set -e
 set -o pipefail
 
 apk --update add \
-    bash \
     ca-certificates \
     ruby \
     ruby-bundler
