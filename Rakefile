@@ -1,5 +1,6 @@
 require 'rake_docker'
 require 'rake_terraform'
+require 'yaml'
 
 namespace "repository" do
   RakeTerraform.define_command_tasks do |t|
