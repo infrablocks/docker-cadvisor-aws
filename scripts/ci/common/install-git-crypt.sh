@@ -11,7 +11,7 @@ GIT_CRYPT_SIGNATURE_URL="https://www.agwa.name/projects/git-crypt/downloads/git-
 apk --update add \
     curl \
     git \
-    gpg \
+    gnupg \
     g++ \
     make \
     openssh \
