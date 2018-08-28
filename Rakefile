@@ -6,6 +6,12 @@ require 'semantic'
 
 require_relative 'lib/version'
 
+def latest_tag
+  Git.open('.').tags.map do |tag|
+    Semantic::Version.new(tag.name)
+  end.max
+end
+
 namespace :image do
   RakeDocker.define_image_tasks do |t|
     t.image_name = 'alpine-aws'
@@ -31,10 +37,4 @@ namespace :version do
     repo.add_tag(next_tag.to_s)
     repo.push('origin', 'master', tags: true)
   end
-end
-
-def latest_tag
-  Git.open('.').tags.map do |tag|
-    Semantic::Version.new(tag.name)
-  end.max
 end
