@@ -6,8 +6,12 @@ require 'semantic'
 
 require_relative 'lib/version'
 
+def repo
+  Git.open('.')
+end
+
 def latest_tag
-  Git.open('.').tags.map do |tag|
+  repo.tags.map do |tag|
     Semantic::Version.new(tag.name)
   end.max
 end
