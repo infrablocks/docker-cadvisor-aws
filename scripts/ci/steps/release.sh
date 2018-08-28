@@ -12,7 +12,7 @@ PROJECT_DIR="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 cd "$PROJECT_DIR"
 
 git crypt unlock
-gir pull
+git pull
 
 ./go version:bump[minor]
 ./go image:publish
