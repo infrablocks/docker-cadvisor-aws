@@ -7,6 +7,7 @@ set -o pipefail
 apk --update add \
     ca-certificates \
     ruby \
-    ruby-bundler
+    ruby-bundler \
+    ruby-json
 
 echo 'gem: --no-document' > /etc/gemrc
