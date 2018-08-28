@@ -33,6 +33,14 @@ namespace :image do
 
     t.tags = [latest_tag.to_s, 'latest']
   end
+
+  desc 'Build and push image'
+  task :publish do
+    Rake::Task['image:clean'].invoke
+    Rake::Task['image:build'].invoke
+    Rake::Task['image:tag'].invoke
+    Rake::Task['image:push'].invoke
+  end
 end
 
 namespace :version do
