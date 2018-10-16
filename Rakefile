@@ -18,15 +18,15 @@ end
 
 namespace :image do
   RakeDocker.define_image_tasks do |t|
-    t.image_name = 'alpine-aws'
+    t.image_name = 'consul-aws'
     t.work_directory = 'build/images'
 
     t.copy_spec = [
-        "src/alpine-aws/Dockerfile",
+        "src/consul-aws/Dockerfile",
     ]
 
-    t.repository_name = 'alpine-aws'
-    t.repository_url = 'infrablocks/alpine-aws'
+    t.repository_name = 'consul-aws'
+    t.repository_url = 'infrablocks/consul-aws'
 
     t.credentials = YAML.load_file(
         "config/secrets/dockerhub/credentials.yaml")

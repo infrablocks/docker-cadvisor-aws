@@ -1,1 +1,1 @@
-# Docker Base Image - Alpine AWS
+# Docker Image - Consul AWS
