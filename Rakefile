@@ -23,6 +23,7 @@ namespace :image do
 
     t.copy_spec = [
         "src/consul-aws/Dockerfile",
+        "src/consul-aws/docker-entrypoint.sh",
     ]
 
     t.repository_name = 'consul-aws'
