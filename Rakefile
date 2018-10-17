@@ -6,6 +6,10 @@ require 'semantic'
 
 require_relative 'lib/version'
 
+Docker.options = {
+    read_timeout: 300
+}
+
 def repo
   Git.open('.')
 end
