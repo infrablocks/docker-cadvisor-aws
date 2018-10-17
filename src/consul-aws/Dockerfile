@@ -1,6 +1,6 @@
-FROM infrablocks/alpine-aws:0.3.0
+FROM infrablocks/alpine-aws-s3-config:0.2.0
 
-# Inspired by https://github.com/hashicorp/docker-consul/blob/3e9120657c15e2f208e3cf16a698f1bb3bee3cdd/0.X/Dockerfile
+# Inspired by hashicorp/docker-consul
 
 ENV CONSUL_VERSION=1.3.0
 ENV HASHICORP_RELEASES=https://releases.hashicorp.com
@@ -33,7 +33,8 @@ RUN set -eux && \
     rm -rf /root/.gnupg && \
     consul version
 
-RUN mkdir -p /consul/data && \
+RUN mkdir -p /consul/bin && \
+    mkdir -p /consul/data && \
     mkdir -p /consul/config && \
     chown -R consul:consul /consul
 
@@ -43,7 +44,6 @@ VOLUME /consul/data
 
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8500 8600 8600/udp
 
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY docker-entrypoint.sh /consul/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["docker-entrypoint.sh"]
-
+ENV STARTUP_SCRIPT_PATH=/consul/bin/docker-entrypoint.sh
