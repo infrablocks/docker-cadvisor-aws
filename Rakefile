@@ -20,7 +20,7 @@ def latest_tag
   end.max
 end
 
-namespace :image do
+namespace :base_image do
   RakeDocker.define_image_tasks do |t|
     t.image_name = 'consul-aws'
     t.work_directory = 'build/images'
@@ -41,10 +41,74 @@ namespace :image do
 
   desc 'Build and push image'
   task :publish do
-    Rake::Task['image:clean'].invoke
-    Rake::Task['image:build'].invoke
-    Rake::Task['image:tag'].invoke
-    Rake::Task['image:push'].invoke
+    Rake::Task['base_image:clean'].invoke
+    Rake::Task['base_image:build'].invoke
+    Rake::Task['base_image:tag'].invoke
+    Rake::Task['base_image:push'].invoke
+  end
+end
+
+namespace :agent_image do
+  RakeDocker.define_image_tasks do |t|
+    t.image_name = 'consul-agent-aws'
+    t.work_directory = 'build/images'
+
+    t.copy_spec = [
+        "src/consul-agent-aws/Dockerfile",
+        "src/consul-agent-aws/docker-entrypoint.sh",
+    ]
+
+    t.repository_name = 'consul-agent-aws'
+    t.repository_url = 'infrablocks/consul-agent-aws'
+
+    t.credentials = YAML.load_file(
+        "config/secrets/dockerhub/credentials.yaml")
+
+    t.build_args = {
+        BASE_IMAGE_VERSION: latest_tag.to_s
+    }
+
+    t.tags = [latest_tag.to_s, 'latest']
+  end
+
+  desc 'Build and push image'
+  task :publish do
+    Rake::Task['agent_image:clean'].invoke
+    Rake::Task['agent_image:build'].invoke
+    Rake::Task['agent_image:tag'].invoke
+    Rake::Task['agent_image:push'].invoke
+  end
+end
+
+namespace :server_image do
+  RakeDocker.define_image_tasks do |t|
+    t.image_name = 'consul-server-aws'
+    t.work_directory = 'build/images'
+
+    t.copy_spec = [
+        "src/consul-server-aws/Dockerfile",
+        "src/consul-server-aws/docker-entrypoint.sh",
+    ]
+
+    t.repository_name = 'consul-server-aws'
+    t.repository_url = 'infrablocks/consul-server-aws'
+
+    t.credentials = YAML.load_file(
+        "config/secrets/dockerhub/credentials.yaml")
+
+    t.build_args = {
+        BASE_IMAGE_VERSION: latest_tag.to_s
+    }
+
+    t.tags = [latest_tag.to_s, 'latest']
+  end
+
+  desc 'Build and push image'
+  task :publish do
+    Rake::Task['server_image:clean'].invoke
+    Rake::Task['server_image:build'].invoke
+    Rake::Task['server_image:tag'].invoke
+    Rake::Task['server_image:push'].invoke
   end
 end
 

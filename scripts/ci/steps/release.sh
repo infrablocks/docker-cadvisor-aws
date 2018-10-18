@@ -15,4 +15,7 @@ git crypt unlock
 git pull
 
 ./go version:bump[minor]
-./go image:publish
+
+./go base_image:publish
+./go agent_image:publish
+./go server_image:publish
