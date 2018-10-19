@@ -36,7 +36,7 @@ fi
 CONSUL_UI=
 if [ "${CONSUL_ENABLE_UI}" = "yes" ]; then
   CONSUL_UI="-ui"
-  ehco "==> Found CONSUL_ENABLE_UI=yes, setting ui option..."
+  echo "==> Found CONSUL_ENABLE_UI=yes, setting ui option..."
 fi
 
 CONSUL_DATA_DIR=/consul/data
