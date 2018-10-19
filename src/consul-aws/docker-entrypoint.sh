@@ -35,7 +35,7 @@ fi
 
 CONSUL_BOOTSTRAP_EXPECT=
 if [ -n "$CONSUL_EXPECTED_SERVERS" ]; then
-  CONSUL_BOOTSTRAP_EXPECT="-boostrap-expect ${CONSUL_EXPECTED_SERVERS}"
+  CONSUL_BOOTSTRAP_EXPECT="-bootstrap-expect ${CONSUL_EXPECTED_SERVERS}"
   echo "==> Expecting '$CONSUL_EXPECTED_SERVERS' servers, setting bootstrap-expect option..."
 fi
 
