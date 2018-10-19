@@ -29,7 +29,7 @@ fi
 
 CONSUL_RETRY_JOIN=
 if [ -n "$CONSUL_EC2_AUTO_JOIN_TAG_KEY" ]; then
-  CONSUL_RETRY_JOIN="-retry-join=\"provider=aws tag_key=${CONSUL_EC2_AUTO_JOIN_TAG_KEY} tag_value=${CONSUL_EC2_AUTO_JOIN_TAG_VALUE}\""
+  CONSUL_RETRY_JOIN="-retry-join provider=aws tag_key=${CONSUL_EC2_AUTO_JOIN_TAG_KEY} tag_value=${CONSUL_EC2_AUTO_JOIN_TAG_VALUE}"
   echo "==> Found EC2 auto-join tag key '$CONSUL_EC2_AUTO_JOIN_TAG_KEY' and value '$CONSUL_EC2_AUTO_JOIN_TAG_VALUE', setting retry-join option..."
 fi
 
@@ -49,9 +49,9 @@ if [ "$1" = 'agent' ]; then
     set -- consul agent \
         -data-dir="$CONSUL_DATA_DIR" \
         -config-dir="$CONSUL_CONFIG_DIR" \
-        "$CONSUL_BIND" \
-        "$CONSUL_CLIENT" \
-        "$CONSUL_RETRY_JOIN" \
+        $CONSUL_BIND \
+        $CONSUL_CLIENT \
+        $CONSUL_RETRY_JOIN \
         "$@"
 elif [ "$1" = 'version' ]; then
     set -- consul "$@"
