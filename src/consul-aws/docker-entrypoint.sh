@@ -33,6 +33,14 @@ if [ -n "$CONSUL_EC2_AUTO_JOIN_TAG_KEY" ]; then
   echo "==> Found EC2 auto-join tag key '$CONSUL_EC2_AUTO_JOIN_TAG_KEY' and value '$CONSUL_EC2_AUTO_JOIN_TAG_VALUE', setting retry-join option..."
 fi
 
+if [ -n "$CONSUL_SERVER_ADDRESSES" ]; then
+  IFS=',' read -ra ADDRESSES <<< "$CONSUL_SERVER_ADDRESSES"
+  for ADDRESS in "${ADDRESSES[@]}"; do
+    CONSUL_RETRY_JOIN+=('-retry-join' "$ADDRESS")
+  done
+  echo "==> Joining consul server(s) at '$CONSUL_SERVER_ADDRESSES', setting retry-join option..."
+fi
+
 CONSUL_BOOTSTRAP_EXPECT=
 if [ -n "$CONSUL_EXPECTED_SERVERS" ]; then
   CONSUL_BOOTSTRAP_EXPECT="-bootstrap-expect ${CONSUL_EXPECTED_SERVERS}"
@@ -42,7 +50,7 @@ fi
 CONSUL_UI=
 if [ "${CONSUL_ENABLE_UI}" = "yes" ]; then
   CONSUL_UI="-ui"
-  echo "==> Found CONSUL_ENABLE_UI=yes, setting ui option..."
+  echo "==> Found request to enable UI, setting ui option..."
 fi
 
 CONSUL_DATA_DIR=/consul/data
