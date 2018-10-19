@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 set -e
 
 CONSUL_BIND=
@@ -48,9 +49,9 @@ if [ "$1" = 'agent' ]; then
     set -- consul agent \
         -data-dir="$CONSUL_DATA_DIR" \
         -config-dir="$CONSUL_CONFIG_DIR" \
-        $CONSUL_BIND \
-        $CONSUL_CLIENT \
-        $CONSUL_RETRY_JOIN \
+        "$CONSUL_BIND" \
+        "$CONSUL_CLIENT" \
+        "$CONSUL_RETRY_JOIN" \
         "$@"
 elif [ "$1" = 'version' ]; then
     set -- consul "$@"
