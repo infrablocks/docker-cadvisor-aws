@@ -33,6 +33,12 @@ if [ -n "$CONSUL_EC2_AUTO_JOIN_TAG_KEY" ]; then
   echo "==> Found EC2 auto-join tag key '$CONSUL_EC2_AUTO_JOIN_TAG_KEY' and value '$CONSUL_EC2_AUTO_JOIN_TAG_VALUE', setting retry-join option..."
 fi
 
+CONSUL_UI=
+if [ "${CONSUL_ENABLE_UI}" = "yes" ]; then
+  CONSUL_UI="-ui"
+  ehco "==> Found CONSUL_ENABLE_UI=yes, setting ui option..."
+fi
+
 CONSUL_DATA_DIR=/consul/data
 CONSUL_CONFIG_DIR=/consul/config
 
@@ -51,6 +57,7 @@ if [ "$1" = 'agent' ]; then
         -config-dir="$CONSUL_CONFIG_DIR" \
         $CONSUL_BIND \
         $CONSUL_CLIENT \
+        $CONSUL_UI \
         $CONSUL_RETRY_JOIN \
         "$@"
 elif [ "$1" = 'version' ]; then
