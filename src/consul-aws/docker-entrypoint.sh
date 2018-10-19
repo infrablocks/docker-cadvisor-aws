@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+[ "$TRACE" = "yes" ] && set -x
 set -e
 
 CONSUL_BIND=
@@ -33,6 +33,12 @@ if [ -n "$CONSUL_EC2_AUTO_JOIN_TAG_KEY" ]; then
   echo "==> Found EC2 auto-join tag key '$CONSUL_EC2_AUTO_JOIN_TAG_KEY' and value '$CONSUL_EC2_AUTO_JOIN_TAG_VALUE', setting retry-join option..."
 fi
 
+CONSUL_BOOTSTRAP_EXPECT=
+if [ -n "$CONSUL_EXPECTED_SERVERS" ]; then
+  CONSUL_BOOTSTRAP_EXPECT="-boostrap-expect ${CONSUL_EXPECTED_SERVERS}"
+  echo "==> Expecting '$CONSUL_EXPECTED_SERVERS' servers, setting bootstrap-expect option..."
+fi
+
 CONSUL_UI=
 if [ "${CONSUL_ENABLE_UI}" = "yes" ]; then
   CONSUL_UI="-ui"
@@ -58,6 +64,7 @@ if [ "$1" = 'agent' ]; then
         ${CONSUL_BIND} \
         ${CONSUL_CLIENT} \
         ${CONSUL_UI} \
+        ${CONSUL_BOOTSTRAP_EXPECT} \
         "${CONSUL_RETRY_JOIN[@]}" \
         "$@"
 elif [ "$1" = 'version' ]; then
