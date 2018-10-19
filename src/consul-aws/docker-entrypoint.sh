@@ -26,6 +26,12 @@ if [ -n "$CONSUL_CLIENT_INTERFACE" ]; then
   echo "==> Found address '$CONSUL_CLIENT_ADDRESS' for interface '$CONSUL_CLIENT_INTERFACE', setting client option..."
 fi
 
+CONSUL_RETRY_JOIN=
+if [ -n "$CONSUL_EC2_AUTO_JOIN_TAG_KEY" ]; then
+  CONSUL_RETRY_JOIN="-retry-join 'provider=aws tag_key=${CONSUL_EC2_AUTO_JOIN_TAG_KEY} tag_value=${CONSUL_EC2_AUTO_JOIN_TAG_VALUE}'"
+  echo "==> Found EC2 auto-join tag key '$CONSUL_EC2_AUTO_JOIN_TAG_KEY' and value '$CONSUL_EC2_AUTO_JOIN_TAG_KEY', setting retry-join option..."
+fi
+
 CONSUL_DATA_DIR=/consul/data
 CONSUL_CONFIG_DIR=/consul/config
 
@@ -44,6 +50,7 @@ if [ "$1" = 'agent' ]; then
         -config-dir="$CONSUL_CONFIG_DIR" \
         $CONSUL_BIND \
         $CONSUL_CLIENT \
+        $CONSUL_RETRY_JOIN \
         "$@"
 elif [ "$1" = 'version' ]; then
     set -- consul "$@"
