@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -z "$REGISTRATOR_REGISTRY_URI" ]; then
     echo >&2 "Error: missing required 'REGISTRATOR_REGISTRY_URI' environment variable."
