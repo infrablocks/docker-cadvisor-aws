@@ -119,7 +119,7 @@ namespace :registrator_image do
 
     t.copy_spec = [
         "src/registrator-aws/Dockerfile",
-        #"src/registrator-aws/docker-entrypoint.sh",
+        "src/registrator-aws/docker-entrypoint.sh",
     ]
 
     t.repository_name = 'registrator-aws'
