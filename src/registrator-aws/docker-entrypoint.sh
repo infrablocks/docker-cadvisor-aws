@@ -5,6 +5,14 @@ if [ -z "$REGISTRATOR_REGISTRY_URI" ]; then
     exit 1
 fi
 
+echo "==> Using registry URI '${REGISTRATOR_REGISTRY_URI}'."
+
+REGISTRATOR_CLEANUP=
+if [ "$REGISTRATOR_CLEANUP_ENABLED" = "yes" ]; then
+  REGISTRATOR_CLEANUP="-cleanup"
+  echo "==> Expecting registrator to clean up dangling services, setting cleanup option..."
+fi
+
 REGISTRATOR_RESYNC=
 if [ -n "$REGISTRATOR_RESYNC_SECONDS" ]; then
   REGISTRATOR_RESYNC="-resync ${REGISTRATOR_RESYNC_SECONDS}"
@@ -24,6 +32,7 @@ if [ -n "$REGISTRATOR_TTL_REFRESH_SECONDS" ]; then
 fi
 
 exec /registrator/bin/registrator \
+    ${REGISTRATOR_CLEANUP} \
     ${REGISTRATOR_RESYNC} \
     ${REGISTRATOR_TTL} \
     ${REGISTRATOR_TTL_REFRESH} \
