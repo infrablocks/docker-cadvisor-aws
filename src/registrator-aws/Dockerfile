@@ -29,4 +29,4 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifi
 
 COPY docker-entrypoint.sh /registrator/bin/docker-entrypoint.sh
 
-ENV STARTUP_SCRIPT_PATH=/registrator/bin/docker-entrypoint.sh
+ENV STARTUP_SCRIPT_PATH "/registrator/bin/docker-entrypoint.sh"
