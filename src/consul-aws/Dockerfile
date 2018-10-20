@@ -1,4 +1,4 @@
-FROM infrablocks/alpine-aws-s3-config:0.3.0-rc.3
+FROM infrablocks/alpine-aws-s3-config:0.5.0-rc.1
 
 # Inspired by hashicorp/docker-consul
 
@@ -9,7 +9,7 @@ RUN addgroup consul && \
     adduser -S -G consul consul
 
 RUN set -eux && \
-    apk add --no-cache ca-certificates curl dumb-init gnupg libcap openssl su-exec iputils && \
+    apk add --no-cache ca-certificates gnupg libcap openssl su-exec iputils && \
     gpg --keyserver pool.sks-keyservers.net --recv-keys 91A6E7F85D05C65630BEF18951852D87348FFC4C && \
     mkdir -p /tmp/build && \
     cd /tmp/build && \
