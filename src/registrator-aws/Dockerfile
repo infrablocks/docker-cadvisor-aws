@@ -27,6 +27,6 @@ FROM infrablocks/alpine-aws-s3-config:0.3.0-rc.3
 COPY --from=builder /bin/registrator /registrator/bin/registrator
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
-COPY docker-entrypoint.sh /registrator/bin
+COPY docker-entrypoint.sh /registrator/bin/docker-entrypoint.sh
 
 ENV STARTUP_SCRIPT_PATH=/registrator/bin/docker-entrypoint.sh
