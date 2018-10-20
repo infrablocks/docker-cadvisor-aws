@@ -17,14 +17,19 @@ fi
 
 CONSUL_CLIENT=
 if [ -n "$CONSUL_CLIENT_INTERFACE" ]; then
-  CONSUL_CLIENT_ADDRESS=$(ip -o -4 addr list $CONSUL_CLIENT_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
-  if [ -z "$CONSUL_CLIENT_ADDRESS" ]; then
+  CONSUL_CLIENT_FOUND_ADDRESS=$(ip -o -4 addr list $CONSUL_CLIENT_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
+  if [ -z "$CONSUL_CLIENT_FOUND_ADDRESS" ]; then
     echo "Could not find IP for interface '$CONSUL_CLIENT_INTERFACE', exiting"
     exit 1
   fi
 
+  CONSUL_CLIENT="-client=$CONSUL_CLIENT_FOUND_ADDRESS"
+  echo "==> Found address '$CONSUL_CLIENT_FOUND_ADDRESS' for interface '$CONSUL_CLIENT_INTERFACE', setting client option..."
+fi
+
+if [ -n "$CONSUL_CLIENT_ADDRESS" ]; then
   CONSUL_CLIENT="-client=$CONSUL_CLIENT_ADDRESS"
-  echo "==> Found address '$CONSUL_CLIENT_ADDRESS' for interface '$CONSUL_CLIENT_INTERFACE', setting client option..."
+  echo "==> Client address '$CONSUL_CLIENT_ADDRESS' provided, setting client option..."
 fi
 
 CONSUL_RETRY_JOIN=()
