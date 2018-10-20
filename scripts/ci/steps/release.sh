@@ -19,3 +19,4 @@ git pull
 ./go base_image:publish
 ./go agent_image:publish
 ./go server_image:publish
+./go registrator_image:publish

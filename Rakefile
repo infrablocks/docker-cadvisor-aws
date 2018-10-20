@@ -112,6 +112,34 @@ namespace :server_image do
   end
 end
 
+namespace :registrator_image do
+  RakeDocker.define_image_tasks do |t|
+    t.image_name = 'registrator-aws'
+    t.work_directory = 'build/images'
+
+    t.copy_spec = [
+        "src/registrator-aws/Dockerfile",
+        #"src/registrator-aws/docker-entrypoint.sh",
+    ]
+
+    t.repository_name = 'registrator-aws'
+    t.repository_url = 'infrablocks/registrator-aws'
+
+    t.credentials = YAML.load_file(
+        "config/secrets/dockerhub/credentials.yaml")
+
+    t.tags = [latest_tag.to_s, 'latest']
+  end
+
+  desc 'Build and push image'
+  task :publish do
+    Rake::Task['registrator_image:clean'].invoke
+    Rake::Task['registrator_image:build'].invoke
+    Rake::Task['registrator_image:tag'].invoke
+    Rake::Task['registrator_image:push'].invoke
+  end
+end
+
 namespace :version do
   task :bump, [:type] do |_, args|
     next_tag = latest_tag.send("#{args.type}!")
