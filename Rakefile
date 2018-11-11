@@ -41,10 +41,10 @@ namespace :image do
 
   desc 'Build and push image'
   task :publish do
-    Rake::Task['base_image:clean'].invoke
-    Rake::Task['base_image:build'].invoke
-    Rake::Task['base_image:tag'].invoke
-    Rake::Task['base_image:push'].invoke
+    Rake::Task['image:clean'].invoke
+    Rake::Task['image:build'].invoke
+    Rake::Task['image:tag'].invoke
+    Rake::Task['image:push'].invoke
   end
 end
 
