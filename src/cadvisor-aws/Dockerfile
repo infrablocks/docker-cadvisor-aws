@@ -21,7 +21,8 @@ RUN apk --no-cache add ca-certificates wget device-mapper findutils && \
 
 RUN mkdir -p /cadvisor/bin && \
     curl -L "https://github.com/google/cadvisor/releases/download/v${CADVISOR_VERSION}/cadvisor" -o "/cadvisor/bin/cadvisor" && \
-    cd /cadvisor/bin; echo "${CADVISOR_CHECKSUM} *cadvisor" | sha256sum -c; cd -
+    cd /cadvisor/bin; echo "${CADVISOR_CHECKSUM} *cadvisor" | sha256sum -c; cd - && \
+    chmod +x /cadvisor/bin/cadvisor
 
 EXPOSE 8080
 
