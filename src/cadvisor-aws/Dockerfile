@@ -1,10 +1,8 @@
-FROM infrablocks/alpine-aws-s3-config:0.6.0
-
-# Inspired by google/cadvisor
+FROM infrablocks/alpine-aws-s3-config:0.20.0
 
 ENV GLIBC_VERSION "2.28-r0"
-ENV CADVISOR_VERSION "0.31.0"
-ENV CADVISOR_CHECKSUM "195faa8d3953b4534bb0f050738ca3f7d6b1a646a1663e5660c9848967ff678f"
+ENV CADVISOR_VERSION "0.36.0"
+ENV CADVISOR_CHECKSUM "7bbc3e229ea41940efe25c37a7c0f6010a4d7e47bee98e0f8e0359a4690b39be"
 
 RUN apk --no-cache add ca-certificates wget device-mapper findutils && \
     apk --no-cache add zfs --repository http://dl-3.alpinelinux.org/alpine/edge/main/ && \
@@ -19,13 +17,15 @@ RUN apk --no-cache add ca-certificates wget device-mapper findutils && \
     rm glibc-bin-${GLIBC_VERSION}.apk && \
     rm -rf /var/cache/apk/*
 
-RUN mkdir -p /cadvisor/bin && \
-    curl -L "https://github.com/google/cadvisor/releases/download/v${CADVISOR_VERSION}/cadvisor" -o "/cadvisor/bin/cadvisor" && \
-    cd /cadvisor/bin; echo "${CADVISOR_CHECKSUM} *cadvisor" | sha256sum -c; cd - && \
-    chmod +x /cadvisor/bin/cadvisor
+RUN mkdir -p /opt/cadvisor/bin && \
+    curl -L "https://github.com/google/cadvisor/releases/download/v${CADVISOR_VERSION}/cadvisor" -o "/opt/cadvisor/bin/cadvisor" && \
+    cd /opt/cadvisor/bin; echo "${CADVISOR_CHECKSUM} *cadvisor" | sha256sum -c; cd - && \
+    chmod +x /opt/cadvisor/bin/cadvisor
 
 EXPOSE 8080
 
-COPY docker-entrypoint.sh /cadvisor/bin/docker-entrypoint.sh
+COPY start.sh /opt/cadvisor/bin/start.sh
 
-ENV STARTUP_SCRIPT_PATH=/cadvisor/bin/docker-entrypoint.sh
+RUN chmod +x /opt/cadvisor/bin/start.sh
+
+ENV STARTUP_SCRIPT_PATH=/opt/cadvisor/bin/start.sh

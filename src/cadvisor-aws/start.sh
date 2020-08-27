@@ -11,6 +11,6 @@ if [ -n "$CADVISOR_PORT" ]; then
   echo "==> Found request to listen on port '${CADVISOR_PORT}', setting port option..."
 fi
 
-exec /cadvisor/bin/cadvisor \
+exec /opt/cadvisor/bin/cadvisor \
     ${CADVISOR_LOGGING_OPTIONS} \
     ${CADVISOR_PORT_OPTION}

@@ -7,6 +7,4 @@ set -o pipefail
 apk \
     --update-cache \
     add \
-        git-crypt \
-        gnupg \
-        openssl
+        docker-compose

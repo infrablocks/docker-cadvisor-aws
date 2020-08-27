@@ -5,7 +5,9 @@ require 'rake_ssh'
 require 'rake_terraform'
 require 'yaml'
 require 'git'
+require 'os'
 require 'semantic'
+require 'rspec/core/rake_task'
 
 require_relative 'lib/version'
 
@@ -22,6 +24,13 @@ def latest_tag
     Semantic::Version.new(tag.name)
   end.max
 end
+
+def tmpdir
+  base = (ENV["TMPDIR"] || "/tmp")
+  OS.osx? ? "/private" + base : base
+end
+
+task :default => :'test:integration'
 
 RakeSSH.define_key_tasks(
     namespace: :deploy_key,
@@ -68,6 +77,7 @@ end
 
 namespace :pipeline do
   task :prepare => [
+      :'circle_ci:project:follow',
       :'circle_ci:env_vars:ensure',
       :'circle_ci:ssh_keys:ensure',
       :'github:deploy_keys:ensure'
@@ -82,7 +92,7 @@ namespace :image do
 
     t.copy_spec = [
         "src/cadvisor-aws/Dockerfile",
-        "src/cadvisor-aws/docker-entrypoint.sh",
+        "src/cadvisor-aws/start.sh",
     ]
 
     t.repository_name = 'cadvisor-aws'
@@ -93,6 +103,50 @@ namespace :image do
 
     t.tags = [latest_tag.to_s, 'latest']
   end
+end
+
+namespace :dependencies do
+  namespace :test do
+    desc "Provision spec dependencies"
+    task :provision do
+      project_name = "docker_cadvisor_aws_test"
+      compose_file = "spec/dependencies.yml"
+
+      project_name_switch = "--project-name #{project_name}"
+      compose_file_switch = "--file #{compose_file}"
+      detach_switch = "--detach"
+      remove_orphans_switch = "--remove-orphans"
+
+      command_switches = "#{compose_file_switch} #{project_name_switch}"
+      subcommand_switches = "#{detach_switch} #{remove_orphans_switch}"
+
+      sh({
+          "TMPDIR" => tmpdir,
+      }, "docker-compose #{command_switches} up #{subcommand_switches}")
+    end
+
+    desc "Destroy spec dependencies"
+    task :destroy do
+      project_name = "docker_cadvisor_aws_test"
+      compose_file = "spec/dependencies.yml"
+
+      project_name_switch = "--project-name #{project_name}"
+      compose_file_switch = "--file #{compose_file}"
+
+      command_switches = "#{compose_file_switch} #{project_name_switch}"
+
+      sh({
+          "TMPDIR" => tmpdir,
+      }, "docker-compose #{command_switches} down")
+    end
+  end
+end
+
+namespace :test do
+  RSpec::Core::RakeTask.new(:integration => [
+      'image:build',
+      'dependencies:test:provision'
+  ])
 end
 
 namespace :version do
