@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gem 'aws-sdk'
@@ -14,5 +16,8 @@ gem 'rake_gpg'
 gem 'rake_ssh'
 gem 'rake_terraform'
 gem 'rspec'
+gem 'rubocop'
+gem 'rubocop-rake'
+gem 'rubocop-rspec'
 gem 'semantic'
 gem 'serverspec'

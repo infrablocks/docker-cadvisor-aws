@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'commands' do
   image = 'cadvisor-aws:latest'
   extra = {
-      'Entrypoint' => '/bin/sh',
+    'Entrypoint' => '/bin/sh'
   }
 
   before(:all) do
@@ -14,9 +16,9 @@ describe 'commands' do
 
   after(:all, &:reset_docker_backend)
 
-  it "includes the cadvisor command" do
+  it 'includes the cadvisor command' do
     expect(command('/opt/cadvisor/bin/cadvisor --version').stdout)
-        .to(match(/0.36.0/))
+      .to(match(/0.36.0/))
   end
 
   def reset_docker_backend
