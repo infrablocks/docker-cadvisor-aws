@@ -29,6 +29,8 @@ if [ -n "$CADVISOR_DOCKER_ONLY" ]; then
   echo "==> Found request for docker metrics only '${CADVISOR_DOCKER_ONLY}', setting docker only option..."
 fi
 
+echo "Running cadvisor."
+# shellcheck disable=SC2086
 exec /opt/cadvisor/bin/cadvisor \
     ${CADVISOR_LOGGING_OPTIONS} \
     ${CADVISOR_PORT_OPTION} \
