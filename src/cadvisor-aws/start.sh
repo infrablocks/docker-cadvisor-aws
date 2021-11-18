@@ -3,7 +3,7 @@
 [ "$TRACE" = "yes" ] && set -x
 set -e
 
-logging_options="${CADVISOR_LOGGING_OPTIONS:- --logtostderr}"
+logging_options="${CADVISOR_LOGGING_OPTIONS:- --logtostderr=true}"
 
 port_option=
 if [ -n "$CADVISOR_PORT" ]; then

@@ -54,7 +54,7 @@ describe 'entrypoint' do
 
     it 'logs to stderr' do
       expect(process('/opt/cadvisor/bin/cadvisor').args)
-        .to(match(/--logtostderr/))
+        .to(match(/--logtostderr=true/))
     end
 
     it 'has no port' do
