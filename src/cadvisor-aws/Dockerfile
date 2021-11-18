@@ -1,8 +1,8 @@
 FROM infrablocks/alpine-aws-s3-config:0.20.0
 
 ENV GLIBC_VERSION "2.28-r0"
-ENV CADVISOR_VERSION "0.36.0"
-ENV CADVISOR_CHECKSUM "7bbc3e229ea41940efe25c37a7c0f6010a4d7e47bee98e0f8e0359a4690b39be"
+ENV CADVISOR_VERSION "0.38.8"
+ENV CADVISOR_CHECKSUM "d18eb77fec9afb3facfb9442935c165b2b4bc1488f41d364d750adb0c18bcd81"
 
 RUN apk --no-cache add ca-certificates wget device-mapper findutils && \
     apk --no-cache add zfs --repository http://dl-3.alpinelinux.org/alpine/edge/main/ && \
