@@ -103,6 +103,58 @@ describe 'entrypoint' do
     end
   end
 
+  describe 'with logging configuration' do
+    describe 'when stderr logging enabled' do
+      before(:all) do
+        create_env_file(
+          endpoint_url: s3_endpoint_url,
+          region: s3_bucket_region,
+          bucket_path: s3_bucket_path,
+          object_path: s3_env_file_object_path,
+          env: {
+            'CADVISOR_LOGTOSTDERR_ENABLED' => 'yes'
+          }
+        )
+
+        execute_docker_entrypoint(
+          started_indicator: 'Running'
+        )
+      end
+
+      after(:all, &:reset_docker_backend)
+
+      it 'includes the logtostderr option as true' do
+        expect(process('/opt/cadvisor/bin/cadvisor').args)
+          .to(match(/--logtostderr=true/))
+      end
+    end
+
+    describe 'when stderr logging disabled' do
+      before(:all) do
+        create_env_file(
+          endpoint_url: s3_endpoint_url,
+          region: s3_bucket_region,
+          bucket_path: s3_bucket_path,
+          object_path: s3_env_file_object_path,
+          env: {
+            'CADVISOR_LOGTOSTDERR_ENABLED' => 'no'
+          }
+        )
+
+        execute_docker_entrypoint(
+          started_indicator: 'Running'
+        )
+      end
+
+      after(:all, &:reset_docker_backend)
+
+      it 'includes the logtostderr option as false' do
+        expect(process('/opt/cadvisor/bin/cadvisor').args)
+          .to(match(/--logtostderr=false/))
+      end
+    end
+  end
+
   describe 'with housekeeping configuration' do
     before(:all) do
       create_env_file(

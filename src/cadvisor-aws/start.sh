@@ -3,7 +3,7 @@
 [ "$TRACE" = "yes" ] && set -x
 set -e
 
-logging_options="${CADVISOR_LOGGING_OPTIONS:- --logtostderr=true}"
+logging_options="${CADVISOR_LOGGING_OPTIONS}"
 
 port_option=
 if [ -n "$CADVISOR_PORT" ]; then
@@ -34,10 +34,23 @@ if [ -n "$CADVISOR_DOCKER_ONLY_ENABLED" ]; then
   fi
 fi
 
+logtostderr_option="--logtostderr=true"
+if [ -n "$CADVISOR_LOGTOSTDERR_ENABLED" ]; then
+  if [[ "$CADVISOR_LOGTOSTDERR_ENABLED" = "yes" ]]; then
+    echo "==> Found request to log to stderr, setting logtostderr option to 'true'..."
+    logtostderr_option="--logtostderr=true"
+  else
+    echo "==> Found request not to log to stderr, setting logtostderr option to 'false'..."
+    logtostderr_option="--logtostderr=false"
+  fi
+fi
+
+
 echo "Running cadvisor."
 # shellcheck disable=SC2086
 exec /opt/cadvisor/bin/cadvisor \
     ${logging_options} \
+    ${logtostderr_option} \
     ${port_option} \
     ${housekeeping_interval_option} \
     ${disable_metrics_option} \
