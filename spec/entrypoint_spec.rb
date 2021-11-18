@@ -78,6 +78,133 @@ describe 'entrypoint' do
     end
   end
 
+  describe 'with port configuration' do
+    before(:all) do
+      create_env_file(
+        endpoint_url: s3_endpoint_url,
+        region: s3_bucket_region,
+        bucket_path: s3_bucket_path,
+        object_path: s3_env_file_object_path,
+        env: {
+          'CADVISOR_PORT' => '1566'
+        }
+      )
+
+      execute_docker_entrypoint(
+        started_indicator: 'Running'
+      )
+    end
+
+    after(:all, &:reset_docker_backend)
+
+    it 'uses the provided port' do
+      expect(process('/opt/cadvisor/bin/cadvisor').args)
+        .to(match(/--port=1566/))
+    end
+  end
+
+  describe 'with housekeeping configuration' do
+    before(:all) do
+      create_env_file(
+        endpoint_url: s3_endpoint_url,
+        region: s3_bucket_region,
+        bucket_path: s3_bucket_path,
+        object_path: s3_env_file_object_path,
+        env: {
+          'CADVISOR_HOUSEKEEPING_INTERVAL' => '30s'
+        }
+      )
+
+      execute_docker_entrypoint(
+        started_indicator: 'Running'
+      )
+    end
+
+    after(:all, &:reset_docker_backend)
+
+    it 'uses the provided housekeeping interval' do
+      expect(process('/opt/cadvisor/bin/cadvisor').args)
+        .to(match(/--housekeeping_interval=30s/))
+    end
+  end
+
+  describe 'with metrics configuration' do
+    before(:all) do
+      create_env_file(
+        endpoint_url: s3_endpoint_url,
+        region: s3_bucket_region,
+        bucket_path: s3_bucket_path,
+        object_path: s3_env_file_object_path,
+        env: {
+          'CADVISOR_DISABLE_METRICS' => 'disk'
+        }
+      )
+
+      execute_docker_entrypoint(
+        started_indicator: 'Running'
+      )
+    end
+
+    after(:all, &:reset_docker_backend)
+
+    it 'disables the provided metrics' do
+      expect(process('/opt/cadvisor/bin/cadvisor').args)
+        .to(match(/--disable_metrics=disk/))
+    end
+  end
+
+  describe 'with docker configuration' do
+    describe 'when enabled' do
+      before(:all) do
+        create_env_file(
+          endpoint_url: s3_endpoint_url,
+          region: s3_bucket_region,
+          bucket_path: s3_bucket_path,
+          object_path: s3_env_file_object_path,
+          env: {
+            'CADVISOR_DOCKER_ONLY_ENABLED' => 'yes'
+          }
+        )
+
+        execute_docker_entrypoint(
+          started_indicator: 'Running'
+        )
+      end
+
+      after(:all, &:reset_docker_backend)
+
+      it 'includes the docker only option as true' do
+        expect(process('/opt/cadvisor/bin/cadvisor').args)
+          .to(match(/--docker_only=true/))
+      end
+    end
+
+    describe 'when disabled' do
+      before(:all) do
+        create_env_file(
+          endpoint_url: s3_endpoint_url,
+          region: s3_bucket_region,
+          bucket_path: s3_bucket_path,
+          object_path: s3_env_file_object_path,
+          env: {
+            'CADVISOR_DOCKER_ONLY_ENABLED' => 'no'
+          }
+        )
+
+        execute_docker_entrypoint(
+          started_indicator: 'Running'
+        )
+      end
+
+      after(:all, &:reset_docker_backend)
+
+      it 'includes the docker only option as false' do
+        expect(process('/opt/cadvisor/bin/cadvisor').args)
+          .to(match(/--docker_only=false/))
+      end
+    end
+  end
+
   def reset_docker_backend
     Specinfra::Backend::Docker.instance.send :cleanup_container
     Specinfra::Backend::Docker.clear
