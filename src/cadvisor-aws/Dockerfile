@@ -1,4 +1,4 @@
-FROM infrablocks/alpine-aws-s3-config:0.20.0
+FROM infrablocks/alpine-aws-s3-config:0.22.0
 
 ENV GLIBC_VERSION "2.28-r0"
 ENV CADVISOR_VERSION "0.38.8"
