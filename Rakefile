@@ -127,9 +127,9 @@ namespace :image do
   ) do |t|
     t.work_directory = 'build/images'
 
-    t.copy_spec = [
-      'src/cadvisor-aws/Dockerfile',
-      'src/cadvisor-aws/start.sh'
+    t.copy_spec = %w[
+      src/cadvisor-aws/Dockerfile
+      src/cadvisor-aws/start.sh
     ]
 
     t.repository_name = 'cadvisor-aws'
@@ -138,6 +138,8 @@ namespace :image do
     t.credentials = YAML.load_file(
       'config/secrets/dockerhub/credentials.yaml'
     )
+
+    t.platform = 'linux/amd64'
 
     t.tags = [latest_tag.to_s, 'latest']
   end
@@ -190,7 +192,7 @@ namespace :test do
     task check: [:rubocop]
 
     desc 'Attempt to automatically fix issues with the test code'
-    task fix: [:'rubocop:auto_correct']
+    task fix: [:'rubocop:autocorrect_all']
   end
 
   RSpec::Core::RakeTask.new(
