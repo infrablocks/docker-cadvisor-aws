@@ -17,7 +17,7 @@ describe 'commands' do
   after(:all, &:reset_docker_backend)
 
   it 'includes the cadvisor command' do
-    expect(command('/opt/cadvisor/bin/cadvisor --version').stderr)
+    expect(command('/opt/cadvisor/bin/cadvisor --version').stdout)
       .to(match(/0.46.0/))
   end
 
