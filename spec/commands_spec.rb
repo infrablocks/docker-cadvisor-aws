@@ -18,7 +18,7 @@ describe 'commands' do
 
   it 'includes the cadvisor command' do
     expect(command('/opt/cadvisor/bin/cadvisor --version').stdout)
-      .to(match(/0.46.0/))
+      .to(match(/0.47.2/))
   end
 
   def reset_docker_backend
