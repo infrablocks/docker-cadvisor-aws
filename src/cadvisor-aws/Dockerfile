@@ -1,4 +1,4 @@
-FROM gcr.io/cadvisor/cadvisor:v0.47.2 as cadvisor
+FROM gcr.io/cadvisor/cadvisor:v0.51.0 as cadvisor
 
 FROM infrablocks/alpine-aws-s3-config:0.23.0
 
