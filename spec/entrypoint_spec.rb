@@ -19,7 +19,7 @@ describe 'entrypoint' do
   }
   image = 'cadvisor-aws:latest'
   extra = {
-    'Entrypoint' => '/bin/sh',
+    'Entrypoint' => ['/bin/sh'],
     'HostConfig' => {
       'NetworkMode' => 'docker_cadvisor_aws_test_default'
     }
